@@ -8,6 +8,8 @@
 
 #include "daemon/daemon.h"
 
+#include <giomm/file.h>
+#include <giomm/filemonitor.h>
 #include <glib-unix.h>
 #include <glib.h>
 #include <glibmm.h>
@@ -15,6 +17,11 @@
 #include <cassert>
 #include <csignal>
 #include <cstddef>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+
+#define FILE_NAME "/home/sashko/pelux-user-id"
 
 namespace TemplateDBusService::Daemon
 {
@@ -38,12 +45,40 @@ namespace TemplateDBusService::Daemon
         unregister_signal_handlers();
     }
 
+    void onFileChanged(const Glib::RefPtr<Gio::File>& oldFile,
+                       const Glib::RefPtr<Gio::File>& newFile,
+                       Gio::FileMonitorEvent monitorEvent)
+    {
+        int uID;
+
+        if (monitorEvent == Gio::FILE_MONITOR_EVENT_CHANGED) {
+            g_info("File changed");
+
+            std::ifstream uidFile(FILE_NAME);
+            if (!uidFile) {
+                g_error("Could not open uid.file");
+
+                return;
+            }
+
+            uidFile >> uID;
+            g_info("ID: %d", uID);
+
+            uidFile.close();
+        }
+    }
+
     int Daemon::run()
     {
         if (!register_signal_handlers())
             return EXIT_FAILURE;
 
         dbus_service_.own_name();
+
+        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(FILE_NAME);
+        Glib::RefPtr<Gio::FileMonitor> monitor = file->monitor_file(Gio::FILE_MONITOR_NONE);
+        g_info("Monitoring file...");
+        monitor->signal_changed().connect(sigc::ptr_fun(onFileChanged));
 
         main_loop_->run();
 
