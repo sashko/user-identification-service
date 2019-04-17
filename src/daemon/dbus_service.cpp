@@ -48,7 +48,8 @@ namespace UserIdentificationDBusService::Daemon
     void DBusService::bus_acquired(const Glib::RefPtr<Gio::DBus::Connection> &connection,
                                    const Glib::ustring & /*name*/)
     {
-        if (user_identification_.register_object(connection, Common::DBus::USER_IDENTIFICATION_OBJECT_PATH) == 0)
+        if (user_identification_.register_object(
+                connection, Common::DBus::USER_IDENTIFICATION_OBJECT_PATH) == 0)
             main_loop_->quit();
     }
 

@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
 
     if (arguments->print_version_and_exit) {
-        std::cout << Glib::get_prgname() << " " << UserIdentificationDBusService::Common::VERSION << '\n';
+        std::cout << Glib::get_prgname() << " " << UserIdentificationDBusService::Common::VERSION
+                  << '\n';
         return EXIT_SUCCESS;
     }
 

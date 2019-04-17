@@ -8,8 +8,9 @@
       <arg name="is_odd" type="b" direction="out"/>
     </method>
 
-    <signal name="RemoveMeBar">
-      <arg name="something" type="u"/>
+    <signal name="UserIdentified">
+      <arg name="UID" type="u"/>
+      <arg name="RoleID" type="s"/>
     </signal>
 
     <property name="RemoveMeBaz" type="b" access="readwrite"/>
