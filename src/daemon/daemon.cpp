@@ -45,29 +45,29 @@ namespace UserIdentificationDBusService::Daemon
         unregister_signal_handlers();
     }
 
-    void onFileChanged(const Glib::RefPtr<Gio::File> &oldFile,
-                       const Glib::RefPtr<Gio::File> &newFile,
-                       Gio::FileMonitorEvent monitorEvent)
+    void on_file_changed(const Glib::RefPtr<Gio::File> &old_file,
+                         const Glib::RefPtr<Gio::File> &new_file,
+                         Gio::FileMonitorEvent monitorEvent)
     {
-        (void)oldFile;
-        (void)newFile;
+        (void)old_file;
+        (void)new_file;
 
-        int uID;
+        int uid;
 
         if (monitorEvent == Gio::FILE_MONITOR_EVENT_CHANGED) {
             g_info("File changed");
 
-            std::ifstream uidFile(FILE_NAME);
-            if (!uidFile) {
+            std::ifstream uid_file(FILE_NAME);
+            if (!uid_file) {
                 g_error("Could not open uid.file");
 
                 return;
             }
 
-            uidFile >> uID;
-            g_info("ID: %d", uID);
+            uid_file >> uid;
+            g_info("ID: %d", uid);
 
-            uidFile.close();
+            uid_file.close();
         }
     }
 
@@ -81,7 +81,7 @@ namespace UserIdentificationDBusService::Daemon
         Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(FILE_NAME);
         Glib::RefPtr<Gio::FileMonitor> monitor = file->monitor_file(Gio::FILE_MONITOR_NONE);
         g_info("Monitoring file...");
-        monitor->signal_changed().connect(sigc::ptr_fun(onFileChanged));
+        monitor->signal_changed().connect(sigc::ptr_fun(on_file_changed));
 
         main_loop_->run();
 
