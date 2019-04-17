@@ -23,7 +23,7 @@
 
 #define FILE_NAME "/home/sashko/pelux-user-id"
 
-namespace TemplateDBusService::Daemon
+namespace UserIdentificationDBusService::Daemon
 {
     namespace
     {
@@ -45,10 +45,13 @@ namespace TemplateDBusService::Daemon
         unregister_signal_handlers();
     }
 
-    void onFileChanged(const Glib::RefPtr<Gio::File>& oldFile,
-                       const Glib::RefPtr<Gio::File>& newFile,
+    void onFileChanged(const Glib::RefPtr<Gio::File> &oldFile,
+                       const Glib::RefPtr<Gio::File> &newFile,
                        Gio::FileMonitorEvent monitorEvent)
     {
+        (void)oldFile;
+        (void)newFile;
+
         int uID;
 
         if (monitorEvent == Gio::FILE_MONITOR_EVENT_CHANGED) {

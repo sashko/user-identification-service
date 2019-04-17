@@ -1,0 +1,7 @@
+[Unit]
+Description=User Identification D-Bus service
+
+[Service]
+Type=dbus
+BusName=com.luxoft.UserIdentification
+ExecStart=@bindir@/user-identification-service

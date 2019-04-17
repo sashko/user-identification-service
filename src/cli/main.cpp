@@ -15,7 +15,7 @@
 
 #include "common/dbus.h"
 #include "common/version.h"
-#include "generated/dbus/template_proxy.h"
+#include "generated/dbus/user_identification_proxy.h"
 
 // Just a simple example of how to create a proxy and call a method in the service and shows use of
 // libcommon.a. Note that *_sync() versions of the proxy methods are used below. This should only be
@@ -23,7 +23,7 @@
 
 namespace
 {
-    using Proxy = com::luxoft::TemplateProxy;
+    using Proxy = com::luxoft::UserIdentificationProxy;
 }
 
 int main(int /*argc*/, char * /*argv*/ [])
@@ -34,20 +34,20 @@ int main(int /*argc*/, char * /*argv*/ [])
     Gio::init();
 
     // Do some argument parsing here. E.g. nice to have a --version for both service and client.
-    // auto arguments = TemplateDBusService::Cli::Arguments::parse(argc, argv);
+    // auto arguments = UserIdentificationDBusService::Cli::Arguments::parse(argc, argv);
     // if (!arguments)
     //     return EXIT_FAILURE;
     //
     // if (arguments->print_version_and_exit) {
-    //     std::cout << Glib::get_prgname() << " " << TemplateDBusService::Common::VERSION << '\n';
+    //     std::cout << Glib::get_prgname() << " " << UserIdentificationDBusService::Common::VERSION << '\n';
     //     return EXIT_SUCCESS;
     // }
 
     Glib::RefPtr<Proxy> proxy =
         Proxy::createForBus_sync(Gio::DBus::BUS_TYPE_SYSTEM,
                                  Gio::DBus::PROXY_FLAGS_NONE,
-                                 TemplateDBusService::Common::DBus::TEMPLATE_SERVICE_NAME,
-                                 TemplateDBusService::Common::DBus::TEMPLATE_OBJECT_PATH);
+                                 UserIdentificationDBusService::Common::DBus::USER_IDENTIFICATION_SERVICE_NAME,
+                                 UserIdentificationDBusService::Common::DBus::USER_IDENTIFICATION_OBJECT_PATH);
 
     if (proxy->dbusProxy()->get_name_owner().empty()) {
         std::cout << "Service not available, quitting.\n";

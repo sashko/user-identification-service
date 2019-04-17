@@ -6,15 +6,15 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#ifndef TEMPLATE_DBUS_SERVICE_DAEMON_DBUS_SERVICE_H
-#define TEMPLATE_DBUS_SERVICE_DAEMON_DBUS_SERVICE_H
+#ifndef USER_IDENTIFICATION_SERVICE_DAEMON_DBUS_SERVICE_H
+#define USER_IDENTIFICATION_SERVICE_DAEMON_DBUS_SERVICE_H
 
 #include <glibmm.h>
 
-#include "generated/dbus/template_common.h"
-#include "generated/dbus/template_stub.h"
+#include "generated/dbus/user_identification_common.h"
+#include "generated/dbus/user_identification_stub.h"
 
-namespace TemplateDBusService::Daemon
+namespace UserIdentificationDBusService::Daemon
 {
     class DBusService
     {
@@ -31,7 +31,7 @@ namespace TemplateDBusService::Daemon
         void unown_name();
 
     private:
-        class Template : public com::luxoft::TemplateStub
+        class UserIdentification : public com::luxoft::UserIdentificationStub
         {
         public:
             void RemoveMeFoo(guint32 number, MethodInvocation &invocation) override;
@@ -53,8 +53,8 @@ namespace TemplateDBusService::Daemon
         Glib::RefPtr<Glib::MainLoop> main_loop_;
         guint connection_id_ = 0;
 
-        Template template_;
+        UserIdentification user_identification_;
     };
 }
 
-#endif // TEMPLATE_DBUS_SERVICE_DAEMON_DBUS_SERVICE_H
+#endif // USER_IDENTIFICATION_SERVICE_DAEMON_DBUS_SERVICE_H

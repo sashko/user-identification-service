@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=com.luxoft.UserIdentification
+Exec=/bin/false
+User=root
+SystemdService=user-identification.service

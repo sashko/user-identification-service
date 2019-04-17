@@ -25,20 +25,16 @@ int main(int argc, char *argv[])
     Glib::init();
     Gio::init();
 
-    auto arguments = TemplateDBusService::Daemon::Arguments::parse(argc, argv, std::cout);
+    auto arguments = UserIdentificationDBusService::Daemon::Arguments::parse(argc, argv, std::cout);
     if (!arguments)
         return EXIT_FAILURE;
 
     if (arguments->print_version_and_exit) {
-        std::cout << Glib::get_prgname() << " " << TemplateDBusService::Common::VERSION << '\n';
+        std::cout << Glib::get_prgname() << " " << UserIdentificationDBusService::Common::VERSION << '\n';
         return EXIT_SUCCESS;
     }
 
-#ifdef TEMPLATE_DBUS_SERVICE_FOO
-    g_message("Using feature FOO. REMOVE ME!");
-#endif
-
-    TemplateDBusService::Daemon::Daemon daemon;
+    UserIdentificationDBusService::Daemon::Daemon daemon;
 
     return daemon.run();
 }

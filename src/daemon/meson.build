@@ -20,7 +20,7 @@ daemon_main_sources = [
     daemon_sources
 ]
 
-daemon_exe = executable('template-dbus-service',
+daemon_exe = executable('user-identification-service',
     dependencies : daemon_deps,
     include_directories : private_include_dir,
     sources : daemon_main_sources,
