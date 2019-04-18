@@ -17,6 +17,7 @@
 #include "config.h"
 #include "daemon/arguments.h"
 #include "daemon/daemon.h"
+#include "daemon/file_monitor.h"
 
 int main(int argc, char *argv[])
 {

@@ -7,9 +7,8 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "daemon/daemon.h"
+#include "daemon/file_monitor.h"
 
-#include <giomm/file.h>
-#include <giomm/filemonitor.h>
 #include <glib-unix.h>
 #include <glib.h>
 #include <glibmm.h>
@@ -20,8 +19,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-
-#define FILE_NAME "/home/sashko/pelux-user-id"
 
 namespace UserIdentificationDBusService::Daemon
 {
@@ -45,32 +42,6 @@ namespace UserIdentificationDBusService::Daemon
         unregister_signal_handlers();
     }
 
-    void on_file_changed(const Glib::RefPtr<Gio::File> &old_file,
-                         const Glib::RefPtr<Gio::File> &new_file,
-                         Gio::FileMonitorEvent monitorEvent)
-    {
-        (void)old_file;
-        (void)new_file;
-
-        int uid;
-
-        if (monitorEvent == Gio::FILE_MONITOR_EVENT_CHANGED) {
-            g_info("File changed");
-
-            std::ifstream uid_file(FILE_NAME);
-            if (!uid_file) {
-                g_error("Could not open uid.file");
-
-                return;
-            }
-
-            uid_file >> uid;
-            g_info("ID: %d", uid);
-
-            uid_file.close();
-        }
-    }
-
     int Daemon::run()
     {
         if (!register_signal_handlers())
@@ -78,10 +49,8 @@ namespace UserIdentificationDBusService::Daemon
 
         dbus_service_.own_name();
 
-        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(FILE_NAME);
-        Glib::RefPtr<Gio::FileMonitor> monitor = file->monitor_file(Gio::FILE_MONITOR_NONE);
-        g_info("Monitoring file...");
-        monitor->signal_changed().connect(sigc::ptr_fun(on_file_changed));
+        UserIdentificationDBusService::FileMonitor::FileMonitor file_monitor;
+        file_monitor.run();
 
         main_loop_->run();
 
